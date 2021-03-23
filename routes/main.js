@@ -31,8 +31,17 @@ router.get("/admin", authenticateToken, (req,res) => {
 });
 
 router.get("/donorfillup", authenticateToken, (req,res) => {
-    console.log(req.user);
-    res.render("donorfillup", {message:''});
+    if(req.user){
+        if(req.user.user.Username === ''){
+            res.render("donorfillup", {message:''});
+        }else{
+            res.render("donor", {md : '', mw : '', user : req.user.user.Username});
+        }
+    }else{
+        res.status(400).render("logind",{
+            message : 'Login first'
+        })
+    }
 });
 
 router.get("/logout",authenticateToken, async (req,res) => {

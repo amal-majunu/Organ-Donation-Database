@@ -18,3 +18,8 @@
   select {
     margin-top:8px
   }
+
+  .err{
+    color: red;
+    font-size: 15px;
+  }
