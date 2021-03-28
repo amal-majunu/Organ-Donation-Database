@@ -210,47 +210,47 @@ exports.logind = async (req,res) => {
 
 exports.update = async (req,res) => {
     try {
-        let username = req.body.donorid;
+        let username = req.body.donor_up;
         db.query('SELECT * FROM donor WHERE Username = ?',[username], async (err,results) => {
             if(err){
                 res.sendStatus(404);
             }
             else if(results.length > 0){
                 let field = req.body.field;
-                let newVal = String(req.body.newvalue);
-                if(field === 'Contact' || field === 'Ailments' || field === 'Password'){
-                    if(field === 'Password'){
-                        newVal = await bcrypt.hash(newVal, 8);
-                        console.log(newVal); 
-                    }
-                    let sql = "UPDATE donor SET " + field + " = ?  WHERE Username = ?" ;  
-                    if(field === 'Ailments'){
-                        sql = "UPDATE donor SET Ailments = CONCAT(Ailments , ' ', ? ) WHERE Username = ?";
-                    }   
-                    db.query(sql, [newVal,username], async (err,result)=>{
-                        if(err){
-                            console.log(err);
-                        }else{
-                            console.log(result);
-                            db.query('SELECT * FROM deletionreason', async (err,results)=>{
-                                if(err){
-                                    console.log(err);
-                                    res.sendStatus(404);
-                                }else if(results.length > 0){
-                                    console.log(results);
-                                    res.render("admin", {mu : 'Updated Successfully', md : '', mo : '', users : results});
-                                }else{
-                                    let users = [];
-                                    res.render("admin", {mu : 'Updated Successfully', md : '', mo : '', users : users});
-                                }
-                            });
-                            
-                        }
-                    });       
+                let newVal = String(req.body.newvalue);                
+                if(field === 'Password'){
+                    newVal = await bcrypt.hash(newVal, 8);
+                    console.log(newVal); 
                 }
+                let sql = "UPDATE donor SET " + field + " = ?  WHERE Username = ?" ;  
+                if(field === 'Ailments'){
+                    sql = "UPDATE donor SET Ailments = CONCAT(Ailments , ' ', ? ) WHERE Username = ?";
+                }   
+                db.query(sql, [newVal,username], async (err,result)=>{
+                    if(err){
+                        console.log(err);
+                    }else{
+                        console.log(result);
+                        db.query('SELECT * FROM deletionreason', async (err,results)=>{
+                            if(err){
+                                console.log(err);
+                                res.sendStatus(404);
+                            }else if(results.length > 0){
+                                console.log(results);
+                                res.render("admin", {mu : 'Updated Successfully', md : '', mo : '', users : results});
+                            }else{
+                                let users = [];
+                                res.render("admin", {mu : 'Updated Successfully', md : '', mo : '', users : users});
+                            }
+                        });
+                        
+                    }
+                });       
+                
             }
             else{
-                return res.render("admin", {mu : 'Invalid DonorID', md : '', mo : ''});
+                let users = [];
+                return res.render("admin", {mu : 'Invalid DonorID', md : '', mo : '',users:users});
             }
         });
                
@@ -284,7 +284,26 @@ exports.delete = async (req,res) => {
                                     console.log(err);
                                 }else{
                                     console.log(result);
-                                    return res.render("admin", {mu : '', md : 'Deleted Successfully', mo : '',users:users});
+                                    db.query('DELETE FROM deletionreason where Username = ?', [username], async (err,result)=>{
+                                        if(err){
+                                            console.log(err);
+                                        }else{
+                                            db.query('SELECT * FROM deletionreason', async (err,upres)=>{
+                                                if(err){
+                                                    console.log(err);
+                                                    res.sendStatus(404);
+                                                }else if(upres.length > 0){
+                                                    users = upres;
+                                                    return res.render("admin", {mu : '', md : 'Deleted Successfully', mo : '',users:users});
+                                                }else{
+                                                    user = [];
+                                                    return res.render("admin", {mu : '', md : 'Deleted Successfully', mo : '',users:users});
+                                                }
+                                            });
+                                            
+                                        }
+                                    });
+                    
                                 }
                             });                    
                         }else {
