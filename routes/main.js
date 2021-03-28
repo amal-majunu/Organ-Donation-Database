@@ -1,7 +1,13 @@
 require('dotenv').config();
 const router = require("express").Router();
-const jwt = require("jsonwebtoken");
 const authenticateToken = require("../middleware/auth");
+const mysql = require("mysql");
+const db = mysql.createConnection({
+    host: process.env.DATABASE_HOST,
+    user: process.env.DATABASE_USER,
+    password: process.env.DATABASE_PASSWORD,
+    database: process.env.DATABASE
+});
 
 router.get("/", (req,res)=>{
     res.render("index");
@@ -11,18 +17,26 @@ router.get("/logind", (req,res)=>{
     res.render("logind", {message:''});
 });
 
-router.get("/register", (req,res)=>{
-    res.render("register", {message:''});
-});
+
 
 router.get("/loginad", (req,res)=>{
     res.render("logina", {message:''});
 });
 
 router.get("/admin", authenticateToken, (req,res) => {
-    console.log(req.user);
     if(req.user){
-        res.render("admin", {mu : '', md : '', mo : ''});
+        db.query('SELECT * FROM deletionreason', async (err,results)=>{
+            if(err){
+                console.log(err);
+                res.sendStatus(404);
+            }else if(results.length > 0){
+                console.log(results);
+                res.render("admin", {mu : '', md : '', mo : '', users : results});
+            }else{
+                let users = [];
+                res.render("admin", {mu : 'Updated Successfully', md : '', mo : '', users : users});
+            }
+        });
     }else {
         res.render("logina",{
             message : 'Login first' 
@@ -30,18 +44,23 @@ router.get("/admin", authenticateToken, (req,res) => {
     }
 });
 
-router.get("/donorfillup", authenticateToken, (req,res) => {
+router.get("/donor", authenticateToken, (req,res) => {
     if(req.user){
-        if(req.user.user.Username === ''){
-            res.render("donorfillup", {message:''});
-        }else{
-            res.render("donor", {md : '', mw : '', user : req.user.user.Username});
-        }
+        res.render("donor", {md : '', mw : '', user : req.user.user.Username});
     }else{
         res.status(400).render("logind",{
             message : 'Login first'
         })
     }
+});
+
+router.get("/organavail",(req,res)=>{
+    let results = [];
+    res.render("organavail",{results : results,message : ''});
+});
+
+router.get("/register", (req,res) => {
+    res.render("donorfillup", {message:''});    
 });
 
 router.get("/logout",authenticateToken, async (req,res) => {

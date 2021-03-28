@@ -50,7 +50,7 @@
 
     <div class="row g-3">
       <div class="col">
-        <form action="/auth/details" method="POST">
+        <form action="/auth/register" method="POST">
         <h4 class="mb-3">Donor Details</h4>
         <div class="needs-validation" novalidate>
           <div class="row g-3">
@@ -64,7 +64,7 @@
 
             <div class="col-sm-6">
               <label for="lastName" class="form-label">Last name</label>
-              <input type="text" name="lasttname" class="form-control" id="lastName" placeholder="" value="" required>
+              <input type="text" name="lastname" class="form-control" id="lastName" placeholder="" value="" required>
               <div class="invalid-feedback">
                 Valid last name is required.
               </div>
@@ -146,6 +146,12 @@
                         </div>
                 </div>
                 <div class="col-12">
+                  <label for="email" class="label">Email</label>
+                  <input type="email" name="email" id="email" class="form-control" placeholder="Email" required >
+                          <div class="invalid-feedback">
+                          </div>
+                  </div>
+                <div class="col-12">
                 <label for="username" class="form-label">Username</label>
                     <div class="input-group has-validation">
                         <span class="input-group-text">@</span>
@@ -155,14 +161,27 @@
                             </div>
                     </div>
                 </div>
+                <div class="col-12">
+                  <label for="inputPassword" class="label">Password</label>
+                  <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
+                          <div class="invalid-feedback">
+                          </div>
+                  </div>
+                  <div class="col-12">
+                    <label for="inputPassword"  class="label">Confirm Password</label>
+                    <input type="password" name="confirmpassword" id="inputPassword" class="form-control" placeholder="Confirm Password" required>
+                            <div class="invalid-feedback">
+                            </div>
+                    </div>
 
                 
                 </br></br>
                 <div class="col-12">
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="same-address">
-                        <label class="form-check-label" for="same-address">Yes I wish To donate my organs to save lives. </label>
-                    </div>
+                  <div class="checkbox mb-3">
+                    <label>
+                      <h6>Already registered? <a href="/logind">Login</a></h6>
+                    </label>
+                  </div>
             </div>
 
           <hr class="my-4">

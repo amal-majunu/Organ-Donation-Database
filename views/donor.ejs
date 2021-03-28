@@ -29,7 +29,7 @@
           <a class="nav-link active" aria-current="page" href="#Heading Box"></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Check Organ Availability</a>
+          <a class="nav-link" href="/organavail">Check Organ Availability</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/logind">Login for Donor</a>
@@ -42,6 +42,7 @@
           </li>
       </ul>
       </div>
+      <div class="log"><a class="nav-link" href="/logout">LOGOUT</a></div>
   </div>
 </div>
 <br>
@@ -58,8 +59,8 @@
     <select id="field" name="field" size="1">
     <option value="Contact">Contact</option>
     <option value="Password">Password</option>
-    <option value="Next">Next of Kin</option>
-    <option value="NextC">Next of Kin Contact</option>
+    <option value="Name">Next of Kin</option>
+    <option value="KContact">Next of Kin Contact</option>
     <option value="Ailments">Ailments</option>
     </select>
     <br>
@@ -82,7 +83,10 @@
       <input type="text" class="form-control" placeholder="XXXXXX" value="<%= user %>" required name="donorid" readonly>
       <label for="donorid" class="form-label">Reason for withdrawal (if any) </label>
       <input type="text" class="form-control" placeholder="Please enter a valid reason" value="" required name="reason">
-      <br><br>
+      <% if(mw){ %>
+        <div class="err"><%= mw %></div>
+     <% } %>
+      <br>
       <input type="submit">
     </form>
     </div>

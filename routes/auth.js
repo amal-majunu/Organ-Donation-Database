@@ -8,11 +8,12 @@ const jwt = require("jsonwebtoken");
 router.post("/loginad", authController.loginad);
 router.post("/logind",  authController.logind);
 router.post("/register", authController.register);
-router.post("/details", authenticateToken, authController.details);
+router.post("/organavail", authController.organavail);
 router.post("/update", authenticateToken, authController.update);
 router.post("/delete", authenticateToken, authController.delete);
 router.post("/dupdate", authenticateToken, authController.dupdate);
 router.post("/withdraw", authenticateToken, authController.withdraw);
+router.post("/addorgan", authenticateToken, authController.addorgan);
 
 
 module.exports = router;

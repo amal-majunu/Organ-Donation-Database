@@ -23,3 +23,19 @@
     color: red;
     font-size: 15px;
   }
+
+  .det{
+    font-size: 15px;
+    background-color: black;
+    color: lavenderblush;
+    text-align: center;
+    border: 1px solid black;
+    border-collapse: inherit;
+    width : 30%;
+    margin: auto;
+    border-spacing: 5px;
+  }
+  table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+  }

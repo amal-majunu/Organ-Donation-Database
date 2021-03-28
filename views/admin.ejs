@@ -29,7 +29,7 @@
                 <a class="nav-link active" aria-current="page" href="#Heading Box"></a>
                 </li>
                 <li class="nav-item">
-                <a class="nav-link" href="/">Check Organ Availability</a>
+                <a class="nav-link" href="/organavail">Check Organ Availability</a>
                 </li>
                 <li class="nav-item">
                 <a class="nav-link" href="/logind">Login for Donor</a>
@@ -65,8 +65,10 @@
             <br>
             <label for="New Value" class="form-label">New value</label>
             <input type="text" class="form-control" placeholder="XXXXXX" value="" required name="newvalue">
-
-        <br><br>
+            <% if(mu){ %>
+              <div class="err"><%= mu  %></div>
+            <% } %>
+        <br>
         <input type="submit">
 
         </form>
@@ -76,29 +78,49 @@
         <h2> Delete Record </h2>
         <label for="donorid" class="form-label">Enter Donor ID</label>
         <input type="text" class="form-control" placeholder="XXXXXX" value="" required name="donor_del">
-        <label for="donorid" class="form-label">Enter Donor Name </label>
-        <input type="text" class="form-control" placeholder="XXXXXX" value="" required name="donorname">
-        <br><br>
+        <% if(md){ %>
+          <div class="err"><%= md  %></div>
+        <% } %>
+        <br>
         <input type="submit">
     </form>
     </div>
+      <% if(users.length > 0){ %>
+      <table class="det">
+        <tr>
+          <th>DonorID</th>
+          <th>Reason of Withdraw</th>
+        </tr>
+        <% users.forEach(function(user){ %>
+          <tr>
+          <td><%= user.Username %></td>
+          <td><%= user.Reason %></td>
+        </tr>
+          <%  }); %>
+      </table>
+      <% } %>
+    
 
-  </div>
+
+</div>
 <br><br><br><br>
     <div class="row">
         <div class="col-12">
-            <form action="/auth/addOrgan" method="POST">
+            <form action="/auth/addorgan" method="POST">
                 <h2> Add Organ to Waiting list  </h2>
                 <label for="donorid" class="form-label">Enter Donor ID</label>
                 <input type="text" class="form-control" placeholder="XXXXXX" value="" required name="donorid">
                 <label for="donorid" class="form-label">Organ/Tissue Name</label>
-                <input type="text" class="form-control" placeholder="XXXXXX" value="" required name="Organ/tissue">
+                <input type="text" class="form-control" placeholder="XXXXXX" value="" required name="organ">
                 <label for="donorid" class="form-label">Hospital</label>
                 <input type="text" class="form-control" placeholder="XXXXXX" value="" required name="Hospital">
                 <label for="donorid" class="form-label">Procurement date </label>
                 <input type="date" class="form-control" placeholder="XXXXXX" value="" required name="ProDate">
+                <% if(mo){ %>
+                  <div class="err"><%= mo  %></div>
+                <% } %>
 
-                <br><br>
+                <br>
                 <input type="submit">
             </form>
         </div>
