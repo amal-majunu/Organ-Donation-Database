@@ -9,53 +9,6 @@ const db = mysql.createConnection({
     database: process.env.DATABASE
 });
 
-// exports.details = async (req,res) => {
-//     try {
-//         let fname = req.body.firstname;
-//         let lname = req.body.lastname;
-//         let name = fname + " " +  lname;
-//         let username = req.body.username;
-//         if(username === ''){
-//             return res.render("donorfillup",{
-//                 message : 'Username is needed'
-//             });
-//         }
-//         else{
-//             db.query('SELECT * FROM donor WHERE Username = ?',[username], async (err,results)=>{
-//                 if(err){
-//                     console.log(err);
-//                 }else if(results.length > 0){
-//                     return res.render("donorfillup",{
-//                         message : 'Username already exist'
-//                     });
-//                 }else{
-//                     username = 'DN' + username;
-//                     console.log(req.user.user.Email);
-//                     db.query('UPDATE donor SET ? WHERE Email = ?', [{
-//                         Name : name, Hospital : req.body.hospital, Username : username,
-//                         Personal_Doctor : req.body.doctor, Gender : req.body.gender,
-//                         Address : req.body.address, State : req.body.state, City : req.body.city,
-//                         Contact : req.body.contact, DOB : req.body.dob, Ailments : req.body.disease
-//                     }, req.user.user.Email], async (err,result) => {
-//                         if(err){
-//                             console.log(err);
-//                         }else{
-//                             console.log(result);
-//                             console.log('Successfully updated');
-//                             // const accessToken = jwt.sign({user:user}, process.env.ACCESS_TOKEN);
-//                            // res.cookie("jwt", accessToken, {secure: true, httpOnly: true})
-//                             res.redirect("/donorfillup");
-//                         }
-//                     });
-
-//                 }
-//             });
-//         } 
-        
-//     } catch (error) {
-//         console.log(error);        
-//     }   
-// };
 
 exports.register = async (req,res) => {
     try {
@@ -389,27 +342,38 @@ exports.addorgan = async (req,res) => {
                 res.sendStatus(404);
                 console.log(err);
             }else{
-                if(results.length > 0){
-                    let organ = req.body.organ;
-                    let procdate = req.body.ProDate;
-                    let hospital = req.body.Hospital;
-                    db.query('INSERT INTO organs SET ?',{
-                        Organ_name : organ,
-                        Donor_username : username,
-                        Hospital : hospital,
-                        Procurement_Date : procdate
-                    }, async (err,result)=>{
-                        if(err){
-                            console.log(err);
-                            res.sendStatus(404);
-                        }else{
-                            console.log(result);
-                            res.render("admin",{mu : '', md : '', mo : 'Successfully added organ'});
+                db.query('SELECT * FROM deletionreason', async (err,users)=>{
+                    if(err){
+                        console.log(err);
+                        res.sendStatus(404);
+                    }else{
+                        let user = [];
+                        if(users.length > 0){
+                            user = users;
                         }
-                    });
-                }else{
-                    res.render("admin",{mu : '', md : '', mo : 'No such username exists'});
-                }
+                        if(results.length > 0){
+                            let organ = req.body.organ;
+                            let procdate = req.body.ProDate;
+                            let hospital = req.body.Hospital;
+                            db.query('INSERT INTO organs SET ?',{
+                                Organ_name : organ,
+                                Donor_username : username,
+                                Hospital : hospital,
+                                Procurement_Date : procdate
+                            }, async (err,result)=>{
+                                if(err){
+                                    console.log(err);
+                                    res.sendStatus(404);
+                                }else{
+                                    console.log(result);
+                                    res.render("admin",{mu : '', md : '', mo : 'Successfully added organ',users : user});
+                                }
+                            });
+                        }else{
+                            res.render("admin",{mu : '', md : '', mo : 'No such username exists',users : user});
+                        }
+                    }
+                });
             }            
         });      
     } catch (error) {
