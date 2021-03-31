@@ -160,7 +160,7 @@ exports.logind = async (req,res) => {
         console.log(error);        
     }
 };
-
+//update feature for admin
 exports.update = async (req,res) => {
     try {
         let username = req.body.donor_up;
@@ -241,6 +241,13 @@ exports.delete = async (req,res) => {
                                         if(err){
                                             console.log(err);
                                         }else{
+                                            db.query('DELETE FROM nextofkin WHERE Username = ?', [username], async (err,res1)=>{
+                                                if(err){
+                                                    console.log(err);
+                                                }else{
+                                                    console.log(res1);
+                                                }
+                                            });
                                             db.query('SELECT * FROM deletionreason', async (err,upres)=>{
                                                 if(err){
                                                     console.log(err);
